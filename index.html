@@ -183,7 +183,7 @@ async function generarVersoSemanal(){
     const recordatorio = hoy===6 ? '📌 Aún hay tiempo…' : hoy===0 ? '📌 Recuerda aprenderlo para hoy.' : '📌 Recuerda durante la semana.';
 
     const listaTexto = lista.map(item=>`📄 ${item.libro} ${item.capitulo}:${item.versiculo}`).join('\n');
-    const msg = `📖 *Versículo de la semana* 📚\n╰➤${v.libro}  ${v.capitulo}:${v.versiculo}(RVR1960)\n“${v.texto}”\n📚 *Versículos hasta ahora* 📖\n${listaTexto}\n${recordatorio}`;
+    const msg = `📖 *Versículo de la semana* 📚\n╰➤${v.libro}  ${v.capitulo}:${v.versiculo} (RVR1960)\n“${v.texto}”\n📚 *Versículos hasta ahora* 📖\n${listaTexto}\n${recordatorio}`;
     document.getElementById('mensajeVersoSemanal').value = msg;
   }catch(e){ console.error(e); alert('Error al cargar el versículo semanal.'); }
 }
