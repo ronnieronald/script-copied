@@ -4,189 +4,383 @@
 <meta charset="UTF-8">
 <title>Generador de Devocionales</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-  body { font-family: Arial, sans-serif; padding: 20px; background: #f0f4ff; color: #333; }
-  h1 { text-align:center; color:#1e3a8a; margin-bottom:20px; }
-  label { font-weight:bold; }
-  select, button, textarea { width: 100%; margin-bottom:15px; padding:10px; font-size:1rem; border-radius:8px; border:1px solid #ccc; }
-  button { cursor:pointer; background:#1e3a8a; color:#fff; transition:0.3s; }
-  button:hover { background:#3b82f6; }
-  textarea { min-height:150px; resize: vertical; font-family: monospace; }
-  h3 { margin-top:30px; color:#1e40af; }
+
+body{
+font-family: Arial, sans-serif;
+padding:20px;
+background:#f0f4ff;
+color:#333;
+}
+
+h1{
+text-align:center;
+color:#1e3a8a;
+margin-bottom:20px;
+}
+
+label{
+font-weight:bold;
+}
+
+select{
+width:100%;
+margin-bottom:15px;
+padding:10px;
+font-size:1rem;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+cursor:pointer;
+background:#1e3a8a;
+color:#fff;
+transition:0.3s;
+font-weight:bold;
+padding:10px;
+border:none;
+border-radius:8px;
+width:100%;
+margin-bottom:20px;
+}
+
+button:hover{
+background:#3b82f6;
+}
+
+textarea{
+width:100%;
+min-height:150px;
+resize:vertical;
+font-family:monospace;
+background:#fff;
+border:1px solid #ccc;
+border-radius:8px;
+padding:12px;
+padding-top:30px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+h3{
+margin-top:30px;
+color:#1e40af;
+}
+
+.contenedor{
+position:relative;
+}
+
+.copyIcon{
+position:absolute;
+top:8px;
+right:8px;
+width:22px;
+height:22px;
+cursor:pointer;
+opacity:0.7;
+transition:0.2s;
+}
+
+.copyIcon:hover{
+opacity:1;
+transform:scale(1.1);
+}
+
+.copiado{
+position:absolute;
+top:8px;
+right:40px;
+font-size:12px;
+color:green;
+display:none;
+font-weight:bold;
+}
+
 </style>
 </head>
+
 <body>
 
 <h1>Generador de Devocionales</h1>
 
-<label for="selectorDia">Selecciona el día:</label>
+<label>Selecciona el día:</label>
 <select id="selectorDia">
-  <option value="0">Lunes</option>
-  <option value="1">Martes</option>
-  <option value="2">Miércoles</option>
-  <option value="3">Jueves</option>
-  <option value="4">Viernes</option>
-  <option value="5">Sábado</option>
-  <option value="6">Domingo</option>
+<option value="0">Lunes</option>
+<option value="1">Martes</option>
+<option value="2">Miércoles</option>
+<option value="3">Jueves</option>
+<option value="4">Viernes</option>
+<option value="5">Sábado</option>
+<option value="6">Domingo</option>
 </select>
 
-<!-- 1️⃣ Devocional de Hoy -->
-<h3>1️⃣ Devocional de Hoy 5AM </h3>
-<button onclick="generarHoy()">Generar</button>
-<button onclick="copiarTexto('mensajeHoy')">Copiar</button>
+<button onclick="generarTodo()">⚡ Generar</button>
+
+<h3>1️⃣ Devocional de Hoy</h3>
+
+<div class="contenedor">
+<img src="https://img.icons8.com/material-outlined/24/copy.png"
+class="copyIcon"
+onclick="copiarTexto('mensajeHoy',this)">
+
+<div class="copiado">Copiado ✅</div>
+
 <textarea id="mensajeHoy" readonly></textarea>
+</div>
 
-<!-- 2️⃣ Prerecordatorio de Mañana -->
-<h3>2️⃣ Prerecordatorio de Mañana 12AM </h3>
-<button onclick="generarManana()">Generar</button>
-<button onclick="copiarTexto('mensajeManana')">Copiar</button>
+<h3>2️⃣ Recordatorio de Mañana</h3>
+
+<div class="contenedor">
+<img src="https://img.icons8.com/material-outlined/24/copy.png"
+class="copyIcon"
+onclick="copiarTexto('mensajeManana',this)">
+
+<div class="copiado">Copiado ✅</div>
+
 <textarea id="mensajeManana" readonly></textarea>
+</div>
 
-<!-- 3️⃣ Devocional Completo (Formato Caja) -->
-<h3>3️⃣ Devocional Completo Mañana 7PM </h3>
-<button onclick="generarCompleto()">Generar</button>
-<button onclick="copiarTexto('mensajeCompleto')">Copiar</button>
+<h3>3️⃣ Devocional Completo</h3>
+
+<div class="contenedor">
+<img src="https://img.icons8.com/material-outlined/24/copy.png"
+class="copyIcon"
+onclick="copiarTexto('mensajeCompleto',this)">
+
+<div class="copiado">Copiado ✅</div>
+
 <textarea id="mensajeCompleto" readonly></textarea>
+</div>
 
-<!-- 4️⃣ Versículo Diario -->
-<h3>4️⃣ Versículo Diario  </h3>
-<button onclick="mostrarVersoDiario()">Generar</button>
-<button onclick="copiarTexto('mensajeVersoDiario')">Copiar</button>
-<textarea id="mensajeVersoDiario" readonly></textarea>
-<div id="dailyVersesWrapper" style="display:none;"></div>
-<script async defer src="https://dailyverses.net/get/random.js?language=nvi"></script>
+<h3>4️⃣ Versículo Semanal</h3>
 
-<!-- 5️⃣ Versículo Semanal -->
-<h3>5️⃣ Versículo Semanal</h3>
-<button onclick="generarVersoSemanal()">Generar</button>
-<button onclick="copiarTexto('mensajeVersoSemanal')">Copiar</button>
+<div class="contenedor">
+<img src="https://img.icons8.com/material-outlined/24/copy.png"
+class="copyIcon"
+onclick="copiarTexto('mensajeVersoSemanal',this)">
+
+<div class="copiado">Copiado ✅</div>
+
 <textarea id="mensajeVersoSemanal" readonly></textarea>
+</div>
 
 <script>
-const SHEET_ID = '2PACX-1vQK8r6I6vYuBhlxnU7pBKRkzknIwqLPFoyuF17xWeIhBihhMQ5JOfXdgy65YKn6sZQ-0BdvoS5Nj2S_';
-const dias = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
-let devocionalesCache = [];
 
-// ======================= Utilidades =======================
-function capitalize(str=''){ return str.charAt(0).toUpperCase() + str.slice(1); }
-function centrarTexto(texto, ancho=17){
-  const limpio = texto.trim();
-  if(limpio.length >= ancho) return limpio;
-  const totalEsp = ancho - limpio.length;
-  const izq = Math.floor(totalEsp/2), der = totalEsp - izq;
-  return ' '.repeat(izq) + limpio + ' '.repeat(der);
+const SHEET_ID='2PACX-1vQK8r6I6vYuBhlxnU7pBKRkzknIwqLPFoyuF17xWeIhBihhMQ5JOfXdgy65YKn6sZQ-0BdvoS5Nj2S_';
+
+const dias=[
+'lunes',
+'martes',
+'miercoles',
+'jueves',
+'viernes',
+'sabado',
+'domingo'
+];
+
+const diasBonitos=[
+'ʟᴜɴᴇs',
+'ᴍᴀʀᴛᴇs',
+'ᴍɪᴇʀᴄᴏʟᴇs',
+'ᴊᴜᴇᴠᴇs',
+'ᴠɪᴇʀɴᴇs',
+'sᴀʙᴀᴅᴏ',
+'ᴅᴏᴍɪɴɢᴏ'
+];
+
+let devocionalesCache=[];
+
+function capitalize(str=''){
+return str.charAt(0).toUpperCase()+str.slice(1);
 }
+
 function diaSeleccionado(){
-  const sel = document.getElementById('selectorDia');
-  return parseInt(sel.value,10);
+const sel=document.getElementById('selectorDia');
+return parseInt(sel.value);
 }
 
-// Auto seleccionar día actual
 window.addEventListener('load',()=>{
-  const hoy = new Date().getDay(); // 0=domingo
-  document.getElementById('selectorDia').value = hoy===0?6:hoy-1;
+const hoy=new Date().getDay();
+document.getElementById('selectorDia').value=hoy===0?6:hoy-1;
 });
 
-// Copiar al portapapeles
-function copiarTexto(id){
-  const txt = document.getElementById(id);
-  txt.select();
-  txt.setSelectionRange(0, 99999);
-  document.execCommand('copy');
-  alert('Texto copiado!');
+function copiarTexto(id,icon){
+
+const texto=document.getElementById(id).value;
+
+navigator.clipboard.writeText(texto);
+
+const aviso=icon.parentElement.querySelector(".copiado");
+
+aviso.style.display="block";
+
+setTimeout(()=>{
+aviso.style.display="none";
+},2000);
+
 }
 
-// ======================= Google Sheets =======================
 async function cargarDevocionales(){
-  if(devocionalesCache.length) return devocionalesCache;
-  try{
-    const url = `https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&single=true&output=tsv`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('No se pudo cargar la hoja');
-    const text = await res.text();
-    const lines = text.trim().split('\n');
-    devocionalesCache = lines.slice(1).map(line=>{
-      const cols = line.split('\t').map(c=>c.trim());
-      return {
-        devocional: cols[1]||'Sin devocional',
-        libro: cols[2]||'',
-        pagina: cols[3]||'',
-        persona: cols[4]||'Desconocido',
-        telefono: cols[5]||null
-      }
-    });
-    return devocionalesCache;
-  } catch(e){
-    console.error(e);
-    alert('Error al cargar devocionales.');
-    return [];
-  }
+
+if(devocionalesCache.length) return devocionalesCache;
+
+const url=`https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&single=true&output=tsv`;
+
+const res=await fetch(url);
+
+const text=await res.text();
+
+const lines=text.trim().split('\n');
+
+devocionalesCache=lines.slice(1).map(line=>{
+
+const cols=line.split('\t').map(c=>c.trim());
+
+return{
+devocional:cols[1]||'',
+libro:cols[2]||'',
+pagina:cols[3]||'',
+persona:cols[4]||''
+};
+
+});
+
+return devocionalesCache;
+
 }
 
-// ======================= Mensajes =======================
-async function generarHoy(){
-  const rows = await cargarDevocionales();
-  const idx = diaSeleccionado();
-  const e = rows[idx];
-  if(!e) return;
-  document.getElementById('mensajeHoy').value =
-    `👤 Hola, ${e.persona}.\n📖 Hoy compartes:\n📄 ${e.devocional}\n📚 ${e.libro}\n📋 Página: ${e.pagina}\n⏰ Envíalo antes de las 12:00 pm\n🎙️ Recuerda enviar tu mensaje de voz a tiempo.`;
+async function generarTodo(){
+
+const rows=await cargarDevocionales();
+
+const idx=diaSeleccionado();
+
+generarHoyInterno(rows,idx);
+generarMananaInterno(rows,idx);
+generarCompletoInterno(rows,idx);
+generarVersoSemanal();
+
 }
 
-async function generarManana(){
-  const rows = await cargarDevocionales();
-  const idx = (diaSeleccionado()+1)%7;
-  const e = rows[idx];
-  if(!e) return;
-  document.getElementById('mensajeManana').value =
-    `👤 ${e.persona}, recuerda que tienes un devocional mañana:\n📄 Tema: ${e.devocional}\n📚 Libro: ${e.libro}\n📋 Página: ${e.pagina}\n📌 Este mensaje volverá a aparecer como recordatorio.`;
+function generarHoyInterno(rows,idx){
+
+const e=rows[idx];
+
+if(!e) return;
+
+document.getElementById('mensajeHoy').value=
+
+`👤 Hola, ${e.persona}.
+📖 Hoy compartes:
+📄 ${e.devocional}
+📚 ${e.libro}
+📋 Página: ${e.pagina}
+⏰ Envíalo antes de las 12:00 pm
+🎙️ Recuerda enviar tu mensaje de voz a tiempo.`;
+
 }
 
-async function generarCompleto(){
-  const rows = await cargarDevocionales();
-  const idx = (diaSeleccionado()+1)%7;
-  const e = rows[idx];
-  if(!e) return;
+function generarMananaInterno(rows,idx){
 
-  let msg = `*Devocional para Mañana:*\n╔══════╗\n${centrarTexto(capitalize(dias[idx]))}\n╚══════╝\n📖 *Tema:* ${e.devocional}\n📚 *Libro:* ${e.libro}\n📋 Página: ${e.pagina}\n🔰 Responsable: ${e.persona}\n🗣️ *Modo:* Mensaje de voz\n\n✨ *Próximos devocionales:*\n`;
-  for(let i=idx+1;i<rows.length && i<dias.length;i++){
-    const d=rows[i];
-    msg+=`_______________________\n📌 ${capitalize(dias[i])}\n📄 ${d.devocional}\n📚 ${d.libro}\n👤 (${d.persona})\n`;
-  }
-  document.getElementById('mensajeCompleto').value = msg;
+const e=rows[(idx+1)%7];
+
+if(!e) return;
+
+document.getElementById('mensajeManana').value=
+
+`👤 ${e.persona}, recuerda que tienes un devocional mañana:
+📄 Tema: ${e.devocional}
+📚 Libro: ${e.libro}
+📋 Página: ${e.pagina}`;
+
 }
 
-// ======================= Versículo Diario =======================
-function mostrarVersoDiario() {
-  const wrapper = document.getElementById('dailyVersesWrapper');
-  const texto = wrapper.querySelector('.dailyVerses.bibleText')?.textContent?.trim();
-  const cita = wrapper.querySelector('.dailyVerses.bibleVerse')?.textContent?.trim();
+function generarCompletoInterno(rows,idx){
 
-  if(texto && cita){
-    document.getElementById('mensajeVersoDiario').value = `📖 Versículo de Hoy 📚\n${texto}\n— ${cita}`;
-  } else {
-    document.getElementById('mensajeVersoDiario').value = 'No se pudo obtener el versículo de hoy.';
-  }
+const next=(idx+1)%7;
+
+const e=rows[next];
+
+let modo="Mensaje de voz";
+
+if([1,3,5].includes(next)){
+modo="Llamada grupal";
 }
 
-// ======================= Versículo Semanal =======================
+let msg=`*Devocional para Mañana:*
+📌 ${(diasBonitos[next])}
+📖 *Tema:* ${e.devocional}
+📚 *Libro:* ${e.libro}
+📋 Página: ${e.pagina}
+🔰 Responsable: ${e.persona}
+🗣️ *Modo:* ${modo}
+
+✨ *Próximos devocionales:*
+`;
+
+for(let i=next+1;i<rows.length && i<dias.length;i++){
+
+const d=rows[i];
+
+msg+=`_______________________
+📌 ${capitalize(dias[i])}
+📄 ${d.devocional}
+📚 ${d.libro}
+👤 (${d.persona})
+`;
+
+}
+
+document.getElementById('mensajeCompleto').value=msg;
+
+}
+
 async function generarVersoSemanal(){
-  try{
-    const res = await fetch('https://raw.githubusercontent.com/ronnieronald/Resources/main/versiculo-semanal.json');
-    if(!res.ok) throw new Error('No se pudo cargar el versículo semanal');
-    const data = await res.json();
-    const v = data.versiculoSemana;
-    const lista = data.versiculosMemorizados;
-    if(!v || !Array.isArray(lista)) return;
 
-    const hoy = new Date().getDay();
-    const recordatorio = hoy===6 ? '📌 Aún hay tiempo…' : hoy===0 ? '📌 Recuerda aprenderlo para hoy.' : '📌 Recuerda durante la semana.';
+try{
 
-    const listaTexto = lista.map(item=>`📄 ${item.libro} ${item.capitulo}:${item.versiculo}`).join('\n');
-    const msg = `📖 *Versículo de la semana* 📚\n╰➤${v.libro}  ${v.capitulo}:${v.versiculo} (RVR1960)\n“${v.texto}”\n📚 *Versículos hasta ahora* 📖\n${listaTexto}\n${recordatorio}`;
-    document.getElementById('mensajeVersoSemanal').value = msg;
-  }catch(e){ console.error(e); alert('Error al cargar el versículo semanal.'); }
+const res = await fetch('https://raw.githubusercontent.com/ronnieronald/Resources/main/versiculo-semanal.json');
+
+const data = await res.json();
+
+const v = data.versiculoSemana;
+const lista = data.versiculosMemorizados;
+
+const hoy = new Date().getDay();
+
+const recordatorio =
+hoy===6 ? '📌 Aún hay tiempo…' :
+hoy===0 ? '📌 Recuerda aprenderlo para hoy.' :
+'📌 Recuerda durante la semana.';
+
+const listaTexto = lista
+.map(item=>`📄 ${item.libro} ${item.capitulo}:${item.versiculo}`)
+.join('\n');
+
+const msg =
+`📖 *Versículo de la semana* 📚
+
+╰➤ ${v.libro} ${v.capitulo}:${v.versiculo} (RVR1960)
+
+“${v.texto}”
+
+📚 *Versículos hasta ahora* 📖
+${listaTexto}
+
+${recordatorio}`;
+
+document.getElementById('mensajeVersoSemanal').value = msg;
+
+}catch(e){
+
+alert('Error al cargar el versículo semanal.');
+
 }
+
+}
+
 </script>
 
 </body>
