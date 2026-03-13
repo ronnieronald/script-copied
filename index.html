@@ -124,9 +124,7 @@ font-weight:bold;
 <img src="https://img.icons8.com/material-outlined/24/copy.png"
 class="copyIcon"
 onclick="copiarTexto('mensajeHoy',this)">
-
 <div class="copiado">Copiado ✅</div>
-
 <textarea id="mensajeHoy" readonly></textarea>
 </div>
 
@@ -136,11 +134,11 @@ onclick="copiarTexto('mensajeHoy',this)">
 <img src="https://img.icons8.com/material-outlined/24/copy.png"
 class="copyIcon"
 onclick="copiarTexto('mensajeManana',this)">
-
 <div class="copiado">Copiado ✅</div>
-
 <textarea id="mensajeManana" readonly></textarea>
 </div>
+
+<button onclick="enviarWhatsapp()">📲 Enviar por WhatsApp</button>
 
 <h3>3️⃣ Devocional Completo</h3>
 
@@ -148,9 +146,7 @@ onclick="copiarTexto('mensajeManana',this)">
 <img src="https://img.icons8.com/material-outlined/24/copy.png"
 class="copyIcon"
 onclick="copiarTexto('mensajeCompleto',this)">
-
 <div class="copiado">Copiado ✅</div>
-
 <textarea id="mensajeCompleto" readonly></textarea>
 </div>
 
@@ -160,45 +156,39 @@ onclick="copiarTexto('mensajeCompleto',this)">
 <img src="https://img.icons8.com/material-outlined/24/copy.png"
 class="copyIcon"
 onclick="copiarTexto('mensajeVersoSemanal',this)">
-
 <div class="copiado">Copiado ✅</div>
-
 <textarea id="mensajeVersoSemanal" readonly></textarea>
 </div>
+
+<h3>5️⃣ Resumen Semanal</h3>
+
+<div class="contenedor">
+<img src="https://img.icons8.com/material-outlined/24/copy.png"
+class="copyIcon"
+onclick="copiarTexto('mensajeResumen',this)">
+<div class="copiado">Copiado ✅</div>
+<textarea id="mensajeResumen" readonly></textarea>
+</div>
+
+<button onclick="generarResumen()">📊 Generar Resumen</button>
 
 <script>
 
 const SHEET_ID='2PACX-1vQK8r6I6vYuBhlxnU7pBKRkzknIwqLPFoyuF17xWeIhBihhMQ5JOfXdgy65YKn6sZQ-0BdvoS5Nj2S_';
 
-const dias=[
-'lunes',
-'martes',
-'miercoles',
-'jueves',
-'viernes',
-'sabado',
-'domingo'
-];
+const dias=['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
 
-const diasBonitos=[
-'ʟᴜɴᴇs',
-'ᴍᴀʀᴛᴇs',
-'ᴍɪᴇʀᴄᴏʟᴇs',
-'ᴊᴜᴇᴠᴇs',
-'ᴠɪᴇʀɴᴇs',
-'sᴀʙᴀᴅᴏ',
-'ᴅᴏᴍɪɴɢᴏ'
-];
+const diasBonitos=['ʟᴜɴᴇs','ᴍᴀʀᴛᴇs','ᴍɪᴇʀᴄᴏʟᴇs','ᴊᴜᴇᴠᴇs','ᴠɪᴇʀɴᴇs','sᴀʙᴀᴅᴏ','ᴅᴏᴍɪɴɢᴏ'];
 
 let devocionalesCache=[];
+let telefonoManana='';
 
 function capitalize(str=''){
 return str.charAt(0).toUpperCase()+str.slice(1);
 }
 
 function diaSeleccionado(){
-const sel=document.getElementById('selectorDia');
-return parseInt(sel.value);
+return parseInt(document.getElementById('selectorDia').value);
 }
 
 window.addEventListener('load',()=>{
@@ -207,19 +197,11 @@ document.getElementById('selectorDia').value=hoy===0?6:hoy-1;
 });
 
 function copiarTexto(id,icon){
-
 const texto=document.getElementById(id).value;
-
 navigator.clipboard.writeText(texto);
-
 const aviso=icon.parentElement.querySelector(".copiado");
-
 aviso.style.display="block";
-
-setTimeout(()=>{
-aviso.style.display="none";
-},2000);
-
+setTimeout(()=>{aviso.style.display="none";},2000);
 }
 
 async function cargarDevocionales(){
@@ -229,13 +211,11 @@ if(devocionalesCache.length) return devocionalesCache;
 const url=`https://docs.google.com/spreadsheets/d/e/${SHEET_ID}/pub?gid=0&single=true&output=tsv`;
 
 const res=await fetch(url);
-
 const text=await res.text();
 
 const lines=text.trim().split('\n');
 
 devocionalesCache=lines.slice(1).map(line=>{
-
 const cols=line.split('\t').map(c=>c.trim());
 
 return{
@@ -243,36 +223,28 @@ devocional:cols[1]||'',
 libro:cols[2]||'',
 pagina:cols[3]||'',
 persona:cols[4]||'',
-telefono: cols[5]''
+telefono:cols[5]||'',
+estado:cols[6]||'❌'
 };
-
 });
 
 return devocionalesCache;
-
 }
 
 async function generarTodo(){
-
 const rows=await cargarDevocionales();
-
 const idx=diaSeleccionado();
-
 generarHoyInterno(rows,idx);
 generarMananaInterno(rows,idx);
 generarCompletoInterno(rows,idx);
 generarVersoSemanal();
-
 }
 
 function generarHoyInterno(rows,idx){
-
 const e=rows[idx];
-
 if(!e) return;
 
 document.getElementById('mensajeHoy').value=
-
 `👤 Hola, ${e.persona}.
 📖 Hoy compartes:
 📄 ${e.devocional}
@@ -280,35 +252,43 @@ document.getElementById('mensajeHoy').value=
 📋 Página: ${e.pagina}
 ⏰ Envíalo antes de las 12:00 pm
 🎙️ Recuerda enviar tu mensaje de voz a tiempo.`;
-
 }
 
 function generarMananaInterno(rows,idx){
 
 const e=rows[(idx+1)%7];
-
 if(!e) return;
 
-document.getElementById('mensajeManana').value=
+telefonoManana=e.telefono;
 
+document.getElementById('mensajeManana').value=
 `👤 ${e.persona}, recuerda que tienes un devocional mañana:
 📄 Tema: ${e.devocional}
 📚 Libro: ${e.libro}
 📋 Página: ${e.pagina}`;
+}
 
+function enviarWhatsapp(){
+
+if(!telefonoManana){
+alert("No hay número disponible");
+return;
+}
+
+const mensaje=document.getElementById('mensajeManana').value;
+const texto=encodeURIComponent(mensaje);
+const numero=telefonoManana.replace(/\D/g,'');
+
+window.open(`https://wa.me/${numero}?text=${texto}`,'_blank');
 }
 
 function generarCompletoInterno(rows,idx){
 
 const next=(idx+1)%7;
-
 const e=rows[next];
 
 let modo="Mensaje de voz";
-
-if([1,3,5].includes(next)){
-modo="Llamada grupal";
-}
+if([1,3,5].includes(next)){modo="Llamada grupal";}
 
 let msg=`*Devocional para Mañana:*
 📌 ${(diasBonitos[next])}
@@ -322,7 +302,6 @@ let msg=`*Devocional para Mañana:*
 `;
 
 for(let i=next+1;i<rows.length && i<dias.length;i++){
-
 const d=rows[i];
 
 msg+=`_______________________
@@ -331,53 +310,78 @@ msg+=`_______________________
 📚 ${d.libro}
 👤 (${d.persona})
 `;
-
 }
 
 document.getElementById('mensajeCompleto').value=msg;
-
 }
 
 async function generarVersoSemanal(){
 
 try{
 
-const res = await fetch('https://raw.githubusercontent.com/ronnieronald/Resources/main/versiculo-semanal.json');
+const res=await fetch('https://raw.githubusercontent.com/ronnieronald/Resources/main/versiculo-semanal.json');
+const data=await res.json();
 
-const data = await res.json();
+const v=data.versiculoSemana;
+const lista=data.versiculosMemorizados;
 
-const v = data.versiculoSemana;
-const lista = data.versiculosMemorizados;
+const listaTexto=lista.map(item=>`📄 ${item.libro} ${item.capitulo}:${item.versiculo}`).join('\n');
 
-const hoy = new Date().getDay();
-
-const recordatorio =
-hoy===6 ? '📌 Aún hay tiempo…' :
-hoy===0 ? '📌 Recuerda aprenderlo para hoy.' :
-'📌 Recuerda aprenderlo durante la semana.';
-
-const listaTexto = lista
-.map(item=>`📄 ${item.libro} ${item.capitulo}:${item.versiculo}`)
-.join('\n');
-
-const msg =
+const msg=
 `📖 *Versículo de la semana* 📚
 ╰➤ ${v.libro} ${v.capitulo}:${v.versiculo} (RVR1960)
 
 “${v.texto}”
 
 📚 *Versículos hasta ahora* 📖
-${listaTexto}
+${listaTexto}`;
 
-${recordatorio}`;
-
-document.getElementById('mensajeVersoSemanal').value = msg;
+document.getElementById('mensajeVersoSemanal').value=msg;
 
 }catch(e){
-
 alert('Error al cargar el versículo semanal.');
+}
 
 }
+
+function construirResumenSemanal(rows){
+
+const diasSemana=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+let mensaje=`📖 *Informe Semanal de*
+╰➤ *Devocionales*
+
+`;
+
+rows.forEach((r,index)=>{
+mensaje+=`──────────────
+🗓️ ${diasSemana[index]}
+👤 ${r.persona}
+📄 ${r.devocional}
+📚 ${r.libro} → ${r.estado}
+
+`;
+});
+
+mensaje+=`__________________________
+
+*Guía:*
+✅ Enviado a tiempo
+⏰ Enviado tarde
+⚠️ Justificado
+❌ No enviado
+
+*¡Gracias por su compromiso esta semana!*`;
+
+return mensaje;
+}
+
+async function generarResumen(){
+
+const rows=await cargarDevocionales();
+const resumen=construirResumenSemanal(rows);
+
+document.getElementById('mensajeResumen').value=resumen;
 
 }
 
